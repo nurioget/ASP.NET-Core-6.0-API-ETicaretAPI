@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Domain
+namespace ETicaretAPI.Domain.Entities
 {
-    public class Product : BaseEntitiy
+    public class Customer : BaseEntitiy
     {
         public string Name { get; set; }
-        public int Stock { get; set; }
-        public long Price { get; set; }
+
+        public ICollection<Order> Orders { get; set; }
+
     }
 }
