@@ -13,32 +13,28 @@ namespace ETicaretAPI.API.Controllers
         private readonly IProductWiriteRepository  _productWiriteRepository;
         private readonly IProductReadRepository _productReadRepository;
 
-        public ProductsController(IProductWiriteRepository productWiriteRepository, IProductReadRepository productReadRepository)
+        private readonly IOrderWiriteRepository _orderWiriteRepository;
+        private readonly IOrderReadRepository _orderReadRepository;
+
+        private readonly ICustomerWiriteRepository _customerWiriteRepository;
+
+        public ProductsController(IProductWiriteRepository productWiriteRepository, IProductReadRepository productReadRepository, IOrderWiriteRepository orderWiriteRepository, IOrderReadRepository orderReadRepository, ICustomerWiriteRepository customerWiriteRepository)
         {
             _productWiriteRepository = productWiriteRepository;
             _productReadRepository = productReadRepository;
+            _orderWiriteRepository = orderWiriteRepository;
+            _orderReadRepository = orderReadRepository;
+            _customerWiriteRepository = customerWiriteRepository;
         }
 
         [HttpGet]
         public async Task  Get()
         {
-            //await _productWiriteRepository.AddRangeAsync(new()
-            //{
-            //     new() { Id=Guid.NewGuid(),Name="Product 1",Price=100,CreateDate=DateTime.UtcNow,Stock=10},
-            //     new() { Id=Guid.NewGuid(),Name="Product 2",Price=234,CreateDate=DateTime.UtcNow,Stock=23},
-            //     new() { Id=Guid.NewGuid(),Name="Product 3",Price=5432,CreateDate=DateTime.UtcNow,Stock=34}
-            //});
-            //await _productWiriteRepository.SaveAsync();
+            Order order = await _orderReadRepository.GetByIdAsync("e9ba3b86-2164-452b-96f3-9f5cb14429f9");
+            order.Address = "mardin";
+            await _orderWiriteRepository.SaveAsync();
+        }
 
-            Product p = await _productReadRepository.GetByIdAsync("a94ef99f-06b5-411d-8203-d1c3b1fbdf22",false);
-            p.Name = "mehmet";
-            await _productWiriteRepository.SaveAsync();
-        }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            Product product = await _productReadRepository.GetByIdAsync(id);
-            return Ok(product);
-        }
+
     }
-}
+} 
