@@ -1,8 +1,10 @@
 ﻿
 using ETicaretAPI.Application.Repositories;
+using ETicaretAPI.Application.ViewModels.Products;
 using ETicaretAPI.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ETicaretAPI.API.Controllers
 {
@@ -13,28 +15,55 @@ namespace ETicaretAPI.API.Controllers
         private readonly IProductWiriteRepository  _productWiriteRepository;
         private readonly IProductReadRepository _productReadRepository;
 
-        private readonly IOrderWiriteRepository _orderWiriteRepository;
-        private readonly IOrderReadRepository _orderReadRepository;
-
-        private readonly ICustomerWiriteRepository _customerWiriteRepository;
-
-        public ProductsController(IProductWiriteRepository productWiriteRepository, IProductReadRepository productReadRepository, IOrderWiriteRepository orderWiriteRepository, IOrderReadRepository orderReadRepository, ICustomerWiriteRepository customerWiriteRepository)
+        public ProductsController(IProductWiriteRepository productWiriteRepository, IProductReadRepository productReadRepository)
         {
             _productWiriteRepository = productWiriteRepository;
             _productReadRepository = productReadRepository;
-            _orderWiriteRepository = orderWiriteRepository;
-            _orderReadRepository = orderReadRepository;
-            _customerWiriteRepository = customerWiriteRepository;
         }
 
         [HttpGet]
-        public async Task  Get()
+        public async Task<IActionResult> Get()
         {
-            Order order = await _orderReadRepository.GetByIdAsync("e9ba3b86-2164-452b-96f3-9f5cb14429f9");
-            order.Address = "mardin";
-            await _orderWiriteRepository.SaveAsync();
+            return Ok(_productReadRepository.GetAll(false));
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            return Ok(_productReadRepository.GetByIdAsync(id,false));
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(VM_Create_Product model)
+        {
+            await _productWiriteRepository.AddAsync(new()
+            {
+                Name = model.Name,
+                Price = model.Price,
+                Stock = model.Stock,
+            });
+            await _productWiriteRepository.SaveAsync();
+            return StatusCode((int)HttpStatusCode.Created);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(VM_Update_Product model)
+        {
+            Product product=await _productReadRepository.GetByIdAsync(model.Id);
+            product.Stock = model.Stock;
+            product.Price = model.Price;
+            product.Name = model.Name;
+            await _productWiriteRepository.SaveAsync();
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _productWiriteRepository.RemoveAsync(id);
+            await _productWiriteRepository.SaveAsync();
+            return Ok();
+        }
     }
 } 
