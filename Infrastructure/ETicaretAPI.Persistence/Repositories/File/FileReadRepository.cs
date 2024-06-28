@@ -1,5 +1,5 @@
 ﻿using ETicaretAPI.Application.Repositories;
-using ETicaretAPI.Domain.Entities;
+using ETicaretAPI.Application.Repositories.File;
 using ETicaretAPI.Persistence.Contexts;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Persistence.Repositories
 {
-    public class ProductWiriteRepository : WriteRepository<Product>, IProductWiriteRepository
+    public class FileReadRepository : ReadRepository<ETicaretAPI.Domain.Entities.File>, IFileReadRepository
     {
-        public ProductWiriteRepository(ETicaretAPIDbContext context) : base(context)
+        public FileReadRepository(ETicaretAPIDbContext context) : base(context)
         {
         }
     }

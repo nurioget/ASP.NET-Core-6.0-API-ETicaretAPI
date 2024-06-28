@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Persistence.Repositories
 {
-    public class WiriteRepository<T> : IWriteRepository<T> where T : BaseEntitiy
+    public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntitiy
     {
         readonly private ETicaretAPIDbContext _context;
 
-        public WiriteRepository(ETicaretAPIDbContext context)
+        public WriteRepository(ETicaretAPIDbContext context)
         {
             _context = context;
         }

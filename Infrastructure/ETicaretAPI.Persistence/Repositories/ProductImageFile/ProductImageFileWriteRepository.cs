@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Persistence.Repositories
 {
-    public class ProductWiriteRepository : WriteRepository<Product>, IProductWiriteRepository
+    public class ProductImageFileWriteRepository : WriteRepository<ProductImageFile>, IProductImageFileWriteRepository
     {
-        public ProductWiriteRepository(ETicaretAPIDbContext context) : base(context)
+        public ProductImageFileWriteRepository(ETicaretAPIDbContext context) : base(context)
         {
         }
     }

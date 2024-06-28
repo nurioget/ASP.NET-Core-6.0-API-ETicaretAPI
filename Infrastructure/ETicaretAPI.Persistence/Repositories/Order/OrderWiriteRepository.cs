@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Persistence.Repositories
 {
-    public class OrderWiriteRepository : WiriteRepository<Order>, IOrderWiriteRepository
+    public class OrderWiriteRepository : WriteRepository<Order>, IOrderWiriteRepository
     {
         public OrderWiriteRepository(ETicaretAPIDbContext context) : base(context)
         {

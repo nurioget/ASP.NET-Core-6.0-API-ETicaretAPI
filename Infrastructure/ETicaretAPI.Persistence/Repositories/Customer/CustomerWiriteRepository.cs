@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Persistence.Repositories
 {
-    public class CustomerWiriteRepository : WiriteRepository<Customer>, ICustomerWiriteRepository
+    public class CustomerWiriteRepository : WriteRepository<Customer>, ICustomerWiriteRepository
     {
         public CustomerWiriteRepository(ETicaretAPIDbContext context) : base(context)
         {
