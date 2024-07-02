@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Storage\Aruze\" />
-    <Folder Include="Services\Storage\AWS\" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.20.0" />
   </ItemGroup>
 
 </Project>
