@@ -1,10 +1,13 @@
 ﻿
 using ETicaretAPI.Application.Abstractions.Storage;
+using ETicaretAPI.Application.Features.Commands.CreateProduct;
+using ETicaretAPI.Application.Features.Queries.GelAllProduct;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Application.Repositories.File;
 using ETicaretAPI.Application.RequestParemetres;
 using ETicaretAPI.Application.ViewModels.Products;
 using ETicaretAPI.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +34,11 @@ namespace ETicaretAPI.API.Controllers
         private readonly IStorageService _storageService;
         private readonly IConfiguration _configuration;
 
-        public ProductsController(IProductWiriteRepository productWiriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IStorageService storageService, IConfiguration configuration)
+
+        private readonly IMediator _mediator;
+
+
+        public ProductsController(IProductWiriteRepository productWiriteRepository, IProductReadRepository productReadRepository, IWebHostEnvironment webHostEnvironment, IFileWriteRepository fileWriteRepository, IFileReadRepository fileReadRepository, IProductImageFileReadRepository productImageFileReadRepository, IProductImageFileWriteRepository productImageFileWriteRepository, IInvoiceFileReadRepository invoiceFileReadRepository, IInvoiceFileWriteRepository invoiceFileWriteRepository, IStorageService storageService, IConfiguration configuration, IMediator mediator)
         {
             _productWiriteRepository = productWiriteRepository;
             _productReadRepository = productReadRepository;
@@ -44,30 +51,14 @@ namespace ETicaretAPI.API.Controllers
             _invoiceFileWriteRepository = invoiceFileWriteRepository;
             _storageService = storageService;
             _configuration = configuration;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] Pagination pagination)
+        public async Task<IActionResult> Get([FromQuery]GetAllProductQueryRequest getAllProductQueryRequest)
         {
-
-            var totalCount=_productReadRepository.GetAll(false).Count();
-            var products = _productReadRepository.GetAll(false)
-                .Skip(pagination.Page * pagination.Size)
-                .Take(pagination.Size)
-                .Select(p => new
-            {
-                p.Id,
-                p.Name,
-                p.Stock,
-                p.Price,
-                p.CreateDate,
-                p.UpdatedDate
-            }).ToList();
-            return Ok(new
-            {
-                totalCount, 
-                products
-            });
+            GetAllProductQueryResponse response = await _mediator.Send(getAllProductQueryRequest);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
@@ -78,15 +69,9 @@ namespace ETicaretAPI.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(VM_Create_Product model)
+        public async Task<IActionResult> Post(CreateProductCommandRequest createProductCommandRequest)
         {
-            await _productWiriteRepository.AddAsync(new()
-            {
-                Name = model.Name,
-                Price = model.Price,
-                Stock = model.Stock,
-            });
-            await _productWiriteRepository.SaveAsync();
+           CreateProductCommandResponse response= await _mediator.Send(createProductCommandRequest);
             return StatusCode((int)HttpStatusCode.Created);
         }
 
