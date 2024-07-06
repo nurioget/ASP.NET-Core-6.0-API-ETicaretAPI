@@ -1,6 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using ETicaretAPI.Application.Abstractions.Azure;
+using ETicaretAPI.Application.Abstractions.Storage.Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;

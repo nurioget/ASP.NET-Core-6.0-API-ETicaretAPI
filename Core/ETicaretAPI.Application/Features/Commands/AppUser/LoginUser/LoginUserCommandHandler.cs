@@ -1,4 +1,6 @@
-﻿using ETicaretAPI.Application.Exceptions;
+﻿using ETicaretAPI.Application.Abstractions.Token;
+using ETicaretAPI.Application.DTOs;
+using ETicaretAPI.Application.Exceptions;
 using ETicaretAPI.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -14,11 +16,13 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.LoginUser
     {
         private readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
         private readonly SignInManager<Domain.Entities.Identity.AppUser> _signManager;
+        private readonly ITokenHandler _tokenHandler;
 
-        public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signManager)
+        public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signManager, ITokenHandler tokenHandler)
         {
             _userManager = userManager;
             _signManager = signManager;
+            _tokenHandler = tokenHandler;
         }
 
         public async Task<LoginUserComandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
@@ -28,15 +32,18 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.LoginUser
                 user = await _userManager.FindByNameAsync(request.UsernameOrEmail);
 
             if (user is null)
-                throw new NotFoundUserException("Kullanıcı adı veya Şifre hatalı");
+                throw new NotFoundUserException();
 
             SignInResult result = await _signManager.CheckPasswordSignInAsync(user, request.Password, false);
             if (result.Succeeded)//Authentication Succeeded
             {
-                //yetki belirlenmeli
+                Token token = _tokenHandler.CreateAccessToken(5);
+                return new LoginUserSuccessCommandResponse()
+                {
+                    Token = token
+                };
             }
-                return new();
-
+            throw new AuthenticationErrorExcaption();
         }
     }
 }
