@@ -1,4 +1,5 @@
-﻿using ETicaretAPI.Application.Abstractions.Token;
+﻿using ETicaretAPI.Application.Abstractions.Services;
+using ETicaretAPI.Application.Abstractions.Token;
 using ETicaretAPI.Application.DTOs;
 using ETicaretAPI.Application.Exceptions;
 using ETicaretAPI.Domain.Entities.Identity;
@@ -14,36 +15,20 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserComandResponse>
     {
-        private readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
-        private readonly SignInManager<Domain.Entities.Identity.AppUser> _signManager;
-        private readonly ITokenHandler _tokenHandler;
+        private readonly IAuthServices _authServices;
 
-        public LoginUserCommandHandler(UserManager<Domain.Entities.Identity.AppUser> userManager, SignInManager<Domain.Entities.Identity.AppUser> signManager, ITokenHandler tokenHandler)
+        public LoginUserCommandHandler(IAuthServices authServices)
         {
-            _userManager = userManager;
-            _signManager = signManager;
-            _tokenHandler = tokenHandler;
+            _authServices = authServices;
         }
 
         public async Task<LoginUserComandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            Domain.Entities.Identity.AppUser user = await _userManager.FindByNameAsync(request.UsernameOrEmail);
-            if (user is null)
-                user = await _userManager.FindByNameAsync(request.UsernameOrEmail);
-
-            if (user is null)
-                throw new NotFoundUserException();
-
-            SignInResult result = await _signManager.CheckPasswordSignInAsync(user, request.Password, false);
-            if (result.Succeeded)//Authentication Succeeded
+            var token = await _authServices.LoginAsync(request.UsernameOrEmail, request.Password,15);
+            return new LoginUserSuccessCommandResponse()
             {
-                Token token = _tokenHandler.CreateAccessToken(5);
-                return new LoginUserSuccessCommandResponse()
-                {
-                    Token = token
-                };
-            }
-            throw new AuthenticationErrorExcaption();
+                Token = token,
+            };
         }
     }
 }
