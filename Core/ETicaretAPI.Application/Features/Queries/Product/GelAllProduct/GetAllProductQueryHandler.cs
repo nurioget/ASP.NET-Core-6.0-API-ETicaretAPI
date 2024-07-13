@@ -1,6 +1,7 @@
-﻿using ETicaretAPI.Application.Repositories;
-using ETicaretAPI.Application.RequestParemetres;
+﻿using ETicaretAPI.Application.Features.Queries.Product.GelAllProduct;
+using ETicaretAPI.Application.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -8,26 +9,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ETicaretAPI.Application.Features.Queries.Product.GelAllProduct
+namespace ETicaretAPI.Application.Features.Queries.Product.GetAllProduct
 {
     public class GetAllProductQueryHandler : IRequestHandler<GetAllProductQueryRequest, GetAllProductQueryResponse>
     {
         readonly IProductReadRepository _productReadRepository;
         readonly ILogger<GetAllProductQueryHandler> _logger;
-
         public GetAllProductQueryHandler(IProductReadRepository productReadRepository, ILogger<GetAllProductQueryHandler> logger)
         {
             _productReadRepository = productReadRepository;
             _logger = logger;
         }
-
         public async Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Get all products.");
-            var totalCount = _productReadRepository.GetAll(false).Count();
-            var products = _productReadRepository.GetAll(false)
-                .Skip(request.Page * request.Size)
-                .Take(request.Size)
+            _logger.LogInformation("Get all products");
+
+            var totalProductCount = _productReadRepository.GetAll(false).Count();
+
+            var products = _productReadRepository.GetAll(false).Skip(request.Page * request.Size).Take(request.Size)
+                .Include(p => p.ProductImageFiles)
                 .Select(p => new
                 {
                     p.Id,
@@ -35,12 +35,14 @@ namespace ETicaretAPI.Application.Features.Queries.Product.GelAllProduct
                     p.Stock,
                     p.Price,
                     p.CreateDate,
-                    p.UpdatedDate
+                    p.UpdatedDate,
+                    p.ProductImageFiles
                 }).ToList();
+
             return new()
             {
                 Products = products,
-                TotalCount = totalCount
+                TotalProductCount = totalProductCount
             };
         }
     }
