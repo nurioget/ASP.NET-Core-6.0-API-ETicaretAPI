@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI.Domain.Entities.Common;
+using ETicaretAPI.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Domain.Entities
 {
-    public class Product : BaseEntitiy
+    public class Basket : BaseEntitiy
     {
-        public string Name { get; set; }
-        public int Stock { get; set; }
-        public float Price { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
-        public ICollection<ProductImageFile> ProductImageFiles { get; set; }
+        public Order Order { get; set; }
         public ICollection<BasketItem> BasketItems { get; set; }
     }
 }
