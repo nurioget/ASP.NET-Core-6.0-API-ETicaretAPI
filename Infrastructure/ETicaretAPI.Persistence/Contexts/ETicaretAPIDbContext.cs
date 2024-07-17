@@ -11,17 +11,17 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Persistence.Contexts
 {
-    public class ETicaretAPIDbContext : IdentityDbContext<AppUser,AppRole,string>
+    public class ETicaretAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public ETicaretAPIDbContext(DbContextOptions options) : base(options)
         { }
-        
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Domain.Entities.File> Files { get; set; }
         public DbSet<ProductImageFile> ProductImageFiles { get; set; }
-        public DbSet<InvoiceFile>  InvoiceFiles { get; set; }
+        public DbSet<InvoiceFile> InvoiceFiles { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
 
@@ -29,6 +29,10 @@ namespace ETicaretAPI.Persistence.Contexts
         {
             builder.Entity<Order>()
                 .HasKey(b => b.Id);
+
+            builder.Entity<Order>()
+                .HasIndex(o => o.OrderCode)
+                .IsUnique();
 
             builder.Entity<Basket>()
                 .HasOne(b => b.Order)
@@ -43,15 +47,15 @@ namespace ETicaretAPI.Persistence.Contexts
             //ChangeTracker : Entityler üzerinden yapılan değişikliklerin  ya da yeni eklenen verilerin yakalanmasını sağlayan propertydir
             //Update operasyonlarında  Track edilen verileri yakalayıp elde etmemizi sağlar
 
-            var datas =  ChangeTracker
+            var datas = ChangeTracker
                 .Entries<BaseEntitiy>();
 
             foreach (var data in datas)
             {
                 _ = data.State switch
                 {
-                    EntityState.Added => data.Entity.CreateDate=DateTime.UtcNow,
-                    EntityState.Modified =>data.Entity.UpdatedDate=DateTime.UtcNow,
+                    EntityState.Added => data.Entity.CreateDate = DateTime.UtcNow,
+                    EntityState.Modified => data.Entity.UpdatedDate = DateTime.UtcNow,
                     _ => DateTime.UtcNow,
                 };
             }
