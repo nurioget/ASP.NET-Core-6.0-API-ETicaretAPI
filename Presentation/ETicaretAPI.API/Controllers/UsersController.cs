@@ -3,6 +3,7 @@ using ETicaretAPI.Application.Features.Commands.AppUser.CreateUser;
 using ETicaretAPI.Application.Features.Commands.AppUser.FacebookLogin;
 using ETicaretAPI.Application.Features.Commands.AppUser.GoogleLogin;
 using ETicaretAPI.Application.Features.Commands.AppUser.LoginUser;
+using ETicaretAPI.Application.Features.Commands.AppUser.UpdatePassword;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace ETicaretAPI.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        readonly IMediator _mediator; 
+        readonly IMediator _mediator;
         readonly IMailService _mailService;
         public UsersController(IMediator mediator, IMailService mailService)
         {
@@ -27,34 +28,11 @@ namespace ETicaretAPI.API.Controllers
             return Ok(response);
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Login(LoginUserCommandRequest loginUserCommandRequest)
+        [HttpPost("update-password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordCommandRequest updatePasswordCommandRequest)
         {
-            LoginUserComandResponse response = await _mediator.Send(loginUserCommandRequest);
+            UpdatePasswordCommandResponse response = await _mediator.Send(updatePasswordCommandRequest);
             return Ok(response);
         }
-
-        [HttpPost("google-login")]
-        public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest googleLoginCommandRequest)
-        {
-            GoogleLoginCommandResponse response = await _mediator.Send(googleLoginCommandRequest);
-            return Ok(response);
-        }
-
-        [HttpPost("facebook-login")]
-        public async Task<IActionResult> FacebookLogin(FacebookLoginCommandRequest facebookLoginCommandRequest)
-        {
-            FacebookLoginCommandResponse response = await _mediator.Send(facebookLoginCommandRequest);
-            return Ok(response);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ExampleMailTest()
-        {
-            await _mailService.SendMessageAsync("nuriogett@gmail.com", "Örnek Mail", "<strong>Bu bir örnek maildir.</strong>");
-            return Ok();
-        }
-
-
     }
 }
