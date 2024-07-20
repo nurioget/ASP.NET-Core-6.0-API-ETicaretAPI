@@ -19,7 +19,7 @@ using ETicaretAPI.Application.Helpers;
 
 namespace ETicaretAPI.Persistence.Services
 {
-    public class AuthService : IAuthServices
+    public class AuthService : IAuthService
     {
         readonly HttpClient _httpClient;
         readonly IConfiguration _configuration;

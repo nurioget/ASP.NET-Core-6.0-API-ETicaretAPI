@@ -15,9 +15,9 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.LoginUser
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommandRequest, LoginUserComandResponse>
     {
-        private readonly IAuthServices _authServices;
+        private readonly IAuthService _authServices;
 
-        public LoginUserCommandHandler(IAuthServices authServices)
+        public LoginUserCommandHandler(IAuthService authServices)
         {
             _authServices = authServices;
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Domain.Entities
 {
-    public class Order : BaseEntitiy
+    public class Order : BaseEntity
     {
         //public Guid CustomerId { get; set; }
         public string Description { get; set; }
@@ -19,5 +19,7 @@ namespace ETicaretAPI.Domain.Entities
         public Basket Basket { get; set; }
         //public ICollection<Product> Products { get; set; }
         //public Customer Customer { get; set; }
+
+        public CompletedOrder CompletedOrder { get; set; }
     }
 }

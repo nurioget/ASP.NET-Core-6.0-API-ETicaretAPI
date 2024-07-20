@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.Abstractions.Services
 {
-    public interface IAuthServices : IExternalAuthentication, IInternalAuthentication
+    public interface IAuthService : IExternalAuthentication, IInternalAuthentication
     {
 
         Task PasswordResetAsnyc(string email);

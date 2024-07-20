@@ -15,9 +15,9 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.FacebookLogin
 {
     public class FacebookLoginCommandHandler : IRequestHandler<FacebookLoginCommandRequest, FacebookLoginCommandResponse>
     {
-        readonly IAuthServices _authServices;
+        readonly IAuthService _authServices;
 
-        public FacebookLoginCommandHandler(IAuthServices authService)
+        public FacebookLoginCommandHandler(IAuthService authService)
         {
             _authServices = authService;
         }

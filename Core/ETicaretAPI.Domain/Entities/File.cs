@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Domain.Entities
 {
-    public class File : BaseEntitiy
+    public class File : BaseEntity
     {
         public string FileName { get; set; }
         public string Path { get; set; }

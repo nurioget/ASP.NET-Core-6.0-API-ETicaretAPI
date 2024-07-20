@@ -11,9 +11,9 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.RefreshTokenLogin
 {
     public class RefreshTokenLoginCommandHandler : IRequestHandler<RefreshTokenLoginCommandRequest, RefreshTokenLoginCommandResponse>
     {
-        private readonly IAuthServices _authServices;
+        private readonly IAuthService _authServices;
 
-        public RefreshTokenLoginCommandHandler(IAuthServices authServices)
+        public RefreshTokenLoginCommandHandler(IAuthService authServices)
         {
             _authServices = authServices;
         }

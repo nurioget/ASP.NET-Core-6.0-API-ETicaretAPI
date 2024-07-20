@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.Repositories
 {
-    public interface IWriteRepository<T> : IRepository<T> where T : BaseEntitiy
+    public interface IWriteRepository<T> : IRepository<T> where T : BaseEntity
     {
         Task<bool> AddAsync(T model);
         Task<bool> AddRangeAsync(List<T> datas);

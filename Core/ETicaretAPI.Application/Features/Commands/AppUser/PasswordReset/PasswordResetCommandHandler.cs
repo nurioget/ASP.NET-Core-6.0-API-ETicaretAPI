@@ -10,9 +10,9 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.PasswordReset
 {
     public class PasswordResetCommandHandler : IRequestHandler<PasswordResetCommandRequest, PasswordResetCommandResponse>
     {
-        readonly IAuthServices _authService;
+        readonly IAuthService _authService;
 
-        public PasswordResetCommandHandler(IAuthServices authService)
+        public PasswordResetCommandHandler(IAuthService authService)
         {
             _authService = authService;
         }

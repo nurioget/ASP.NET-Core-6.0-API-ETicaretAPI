@@ -1,5 +1,4 @@
-﻿using ETicaretAPI.Domain.Entities.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using ETicaretAPI.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Application.Repositories
 {
-    public interface IRepository<T> where T : BaseEntity
+    public interface ICompletedOrderReadRepository : IReadRepository<CompletedOrder>
     {
-        DbSet<T> Table {  get; }
     }
 }

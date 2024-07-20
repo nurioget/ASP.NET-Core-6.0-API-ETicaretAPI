@@ -10,9 +10,9 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.VerifyResetToken
 {
     public class VerifyResetTokenCommandHandler : IRequestHandler<VerifyResetTokenCommandRequest, VerifyResetTokenCommandResponse>
     {
-        readonly IAuthServices _authService;
+        readonly IAuthService _authService;
 
-        public VerifyResetTokenCommandHandler(IAuthServices authService)
+        public VerifyResetTokenCommandHandler(IAuthService authService)
         {
             _authService = authService;
         }

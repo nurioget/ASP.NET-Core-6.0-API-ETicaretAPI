@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Domain.Entities
 {
-    public class BasketItem : BaseEntitiy
+    public class BasketItem : BaseEntity
     {
         public Guid BasketId { get; set; }
         public Guid ProductId { get; set; }

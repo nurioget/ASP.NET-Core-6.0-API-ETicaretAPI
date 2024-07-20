@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ETicaretAPI.Domain.Entities.Common
 {
-    public class BaseEntitiy
+    public class BaseEntity
     {
         public Guid Id { get; set; }
         public DateTime CreateDate { get; set; }

@@ -24,6 +24,7 @@ namespace ETicaretAPI.Persistence.Contexts
         public DbSet<InvoiceFile> InvoiceFiles { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
+        public DbSet<CompletedOrder> CompletedOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -39,6 +40,11 @@ namespace ETicaretAPI.Persistence.Contexts
                 .WithOne(o => o.Basket)
                 .HasForeignKey<Order>(b => b.Id);
 
+            builder.Entity<Order>()
+               .HasOne(o => o.CompletedOrder)
+               .WithOne(c => c.Order)
+               .HasForeignKey<CompletedOrder>(c => c.OrderId);
+
             base.OnModelCreating(builder);
         }
 
@@ -48,7 +54,7 @@ namespace ETicaretAPI.Persistence.Contexts
             //Update operasyonlarında  Track edilen verileri yakalayıp elde etmemizi sağlar
 
             var datas = ChangeTracker
-                .Entries<BaseEntitiy>();
+                .Entries<BaseEntity>();
 
             foreach (var data in datas)
             {
