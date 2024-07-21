@@ -34,7 +34,7 @@ namespace ETicaretAPI.Application.Features.Queries.Product.GetAllProduct
                     p.Name,
                     p.Stock,
                     p.Price,
-                    p.CreateDate,
+                    p.CreatedDate,
                     p.UpdatedDate,
                     p.ProductImageFiles
                 }).ToList();
