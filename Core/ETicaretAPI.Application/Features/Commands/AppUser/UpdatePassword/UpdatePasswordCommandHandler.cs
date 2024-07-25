@@ -11,9 +11,9 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.UpdatePassword
 {
     public class UpdatePasswordCommandHandler : IRequestHandler<UpdatePasswordCommandRequest, UpdatePasswordCommandResponse>
     {
-        readonly IUserServices _userService;
+        readonly IUserService _userService;
 
-        public UpdatePasswordCommandHandler(IUserServices userService)
+        public UpdatePasswordCommandHandler(IUserService userService)
         {
             _userService = userService;
         }

@@ -26,14 +26,14 @@ namespace ETicaretAPI.Persistence.Services
         readonly UserManager<Domain.Entities.Identity.AppUser> _userManager;
         readonly ITokenHandler _tokenHandler;
         readonly SignInManager<Domain.Entities.Identity.AppUser> _signInManager;
-        readonly IUserServices _userServices;
+        readonly IUserService _userServices;
         readonly IMailService _mailService;
         public AuthService(IHttpClientFactory httpClientFactory,
             IConfiguration configuration,
             UserManager<Domain.Entities.Identity.AppUser> userManager,
             ITokenHandler tokenHandler,
             SignInManager<AppUser> signInManager,
-            IUserServices userServices,
+            IUserService userServices,
             IMailService mailService)
         {
             _httpClient = httpClientFactory.CreateClient();

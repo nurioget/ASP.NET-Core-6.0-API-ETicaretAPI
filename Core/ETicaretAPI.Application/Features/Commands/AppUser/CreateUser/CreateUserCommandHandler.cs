@@ -7,9 +7,9 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.CreateUser
 {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommandRequest, CreateUserCommandResponse>
     {
-        private readonly IUserServices _userServices;
+        private readonly IUserService _userServices;
 
-        public CreateUserCommandHandler(IUserServices userServices)
+        public CreateUserCommandHandler(IUserService userServices)
         {
             _userServices = userServices;
         }
