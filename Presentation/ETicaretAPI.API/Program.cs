@@ -22,6 +22,7 @@ using System.Text;
 using ETicaretApi.SignalR;
 using ETicaretApi.SignalR.Hubs;
 using Microsoft.AspNetCore.Builder;
+using ETicaretAPI.API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,7 +75,11 @@ builder.Services.AddHttpLogging(logging =>
     logging.ResponseBodyLogLimit = 4096;
 });
 
-builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+    options.Filters.Add<RolePermissionFilter>();
+})
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 
