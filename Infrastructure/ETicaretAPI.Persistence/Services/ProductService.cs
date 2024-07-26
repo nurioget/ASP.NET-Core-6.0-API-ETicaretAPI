@@ -1,6 +1,7 @@
 ﻿using ETicaretAPI.Application.Abstractions.Services;
 using ETicaretAPI.Application.Repositories;
 using ETicaretAPI.Domain.Entities;
+using ETicaretAPI.Persistence.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace ETicaretAPI.Persistence.Services
     {
         readonly IProductReadRepository _productReadRepository;
         readonly IQRCodeService _qrCodeService;
-        public ProductService(IProductReadRepository productReadRepository, IQRCodeService qrCodeService)
+        readonly IProductWiriteRepository _productWriteRepository;
+        public ProductService(IProductReadRepository productReadRepository, IQRCodeService qrCodeService, IProductWiriteRepository productWriteRepository)
         {
             _productReadRepository = productReadRepository;
             _qrCodeService = qrCodeService;
+            _productWriteRepository = productWriteRepository;
         }
 
         public async Task<byte[]> QrCodeToProductAsync(string productId)
@@ -37,6 +40,16 @@ namespace ETicaretAPI.Persistence.Services
             string plainText = JsonSerializer.Serialize(plainObject);
 
             return _qrCodeService.GenerateQRCode(plainText);
+        }
+
+        public async Task StockUpdateToProductAsync(string productId, int stock)
+        {
+            Product product = await _productReadRepository.GetByIdAsync(productId);
+            if (product == null)
+                throw new Exception("Product not found");
+
+            product.Stock = stock;
+            await _productWriteRepository.SaveAsync();
         }
     }
 }
